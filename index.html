@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Notewise — Book & Podcast Tracker</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="app">
+
+  <!-- LIBRARY VIEW -->
+  <section class="view" id="view-library" data-view="library">
+    <header class="topbar">
+      <h1>My Library</h1>
+    </header>
+
+    <div class="search-row">
+      <input type="search" id="search-input" placeholder="Search titles or notes…" />
+    </div>
+
+    <div class="filter-row" id="filter-row">
+      <select id="filter-type">
+        <option value="all">All types</option>
+        <option value="book">Books</option>
+        <option value="podcast">Podcasts</option>
+      </select>
+      <select id="filter-status">
+        <option value="all">All statuses</option>
+        <option value="in_progress">In progress</option>
+        <option value="finished">Finished</option>
+      </select>
+      <select id="filter-genre">
+        <option value="all">All genres</option>
+      </select>
+    </div>
+
+    <div class="item-list" id="item-list"></div>
+    <p class="empty-state" id="library-empty" hidden>Nothing here yet. Tap + to add your first book or podcast.</p>
+
+    <button class="fab" id="btn-open-add" aria-label="Add item">+</button>
+  </section>
+
+  <!-- ADD ITEM VIEW -->
+  <section class="view" id="view-add" data-view="add" hidden>
+    <header class="topbar">
+      <button class="btn-icon" id="btn-add-back" aria-label="Back">←</button>
+      <h1>Add Item</h1>
+    </header>
+
+    <form class="form" id="add-form">
+      <label>
+        Title
+        <input type="text" id="add-title" required placeholder="e.g. Atomic Habits" />
+      </label>
+
+      <label>Type</label>
+      <div class="segmented" id="add-type" data-value="book">
+        <button type="button" class="segmented-btn active" data-value="book">Book</button>
+        <button type="button" class="segmented-btn" data-value="podcast">Podcast</button>
+      </div>
+
+      <label>
+        Author / Host
+        <input type="text" id="add-author" placeholder="e.g. James Clear" />
+      </label>
+
+      <label>
+        Genre / Topic
+        <input type="text" id="add-genre" list="genre-options" placeholder="e.g. Business, Health, Fiction, Mindset" />
+        <datalist id="genre-options"></datalist>
+      </label>
+
+      <label>Status</label>
+      <div class="segmented" id="add-status" data-value="in_progress">
+        <button type="button" class="segmented-btn active" data-value="in_progress">In progress</button>
+        <button type="button" class="segmented-btn" data-value="finished">Finished</button>
+      </div>
+
+      <button type="submit" class="btn-primary">Save</button>
+    </form>
+  </section>
+
+  <!-- ITEM DETAIL VIEW -->
+  <section class="view" id="view-detail" data-view="detail" hidden>
+    <header class="topbar">
+      <button class="btn-icon" id="btn-detail-back" aria-label="Back">←</button>
+      <h1 id="detail-title">Title</h1>
+    </header>
+
+    <div class="detail-meta">
+      <p id="detail-author" class="detail-author"></p>
+      <div class="badge-row">
+        <span class="badge" id="detail-genre"></span>
+        <span class="badge" id="detail-type"></span>
+      </div>
+      <div class="segmented" id="detail-status">
+        <button type="button" class="segmented-btn" data-value="in_progress">In progress</button>
+        <button type="button" class="segmented-btn" data-value="finished">Finished</button>
+      </div>
+
+      <div class="rating-row" id="rating-row">
+        <span class="rating-label">Your rating</span>
+        <div class="stars" id="detail-stars">
+          <button type="button" class="star" data-star="1">★</button>
+          <button type="button" class="star" data-star="2">★</button>
+          <button type="button" class="star" data-star="3">★</button>
+          <button type="button" class="star" data-star="4">★</button>
+          <button type="button" class="star" data-star="5">★</button>
+        </div>
+      </div>
+      <p class="rating-hint" id="rating-hint">Mark as Finished to add a rating.</p>
+    </div>
+
+    <div class="note-composer">
+      <div class="segmented segmented-tags" id="note-tag" data-value="takeaway">
+        <button type="button" class="segmented-btn" data-value="quote">Quote</button>
+        <button type="button" class="segmented-btn active" data-value="takeaway">Key Takeaway</button>
+        <button type="button" class="segmented-btn" data-value="question">Question</button>
+        <button type="button" class="segmented-btn" data-value="action">Action Item</button>
+      </div>
+      <textarea id="note-text" rows="2" placeholder="Jot down a quote, takeaway, question, or action item…"></textarea>
+      <button class="btn-primary" id="btn-add-note">Add Note</button>
+    </div>
+
+    <div class="notes-list" id="notes-list"></div>
+    <p class="empty-state" id="notes-empty" hidden>No notes yet — add your first one above.</p>
+  </section>
+
+  <!-- RESURFACE VIEW -->
+  <section class="view" id="view-resurface" data-view="resurface" hidden>
+    <header class="topbar">
+      <h1>Resurface</h1>
+    </header>
+
+    <div class="resurface-card" id="resurface-card" hidden>
+      <span class="badge" id="resurface-tag"></span>
+      <p class="resurface-text" id="resurface-text"></p>
+      <p class="resurface-source" id="resurface-source"></p>
+      <button class="btn-primary" id="btn-resurface-another">Show me another</button>
+    </div>
+    <p class="empty-state" id="resurface-empty" hidden>Add a few notes first, then come back here to rediscover them.</p>
+  </section>
+
+  <!-- SETTINGS VIEW -->
+  <section class="view" id="view-settings" data-view="settings" hidden>
+    <header class="topbar">
+      <h1>Settings</h1>
+    </header>
+
+    <div class="settings-list">
+      <button class="btn-secondary" id="btn-export">Export my data</button>
+      <p class="settings-hint">Downloads a backup file of every item and note stored in this browser.</p>
+    </div>
+  </section>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="nav-btn active" data-nav="library">
+      <span class="nav-icon">📚</span><span>Library</span>
+    </button>
+    <button class="nav-btn" data-nav="resurface">
+      <span class="nav-icon">🔀</span><span>Resurface</span>
+    </button>
+    <button class="nav-btn" data-nav="settings">
+      <span class="nav-icon">⚙️</span><span>Settings</span>
+    </button>
+  </nav>
+
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
